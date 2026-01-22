@@ -41,7 +41,7 @@ class Pedido(Base):
     status = Column("status", ChoiceType(choices=STATUS_PEDIDO))  #pendente, cancelado e finalizado
     usuario = Column("usuario", ForeignKey("usuarios.id"))
     preco = Column("preco", Float)
-    #cd_itens_pedido = 
+    #itens_pedido = Column("itens_pedido", ForeignKey("itens_pedido.id"))
 
     def __init__(self, usuario, status='PENDENTE', preco=0):
         self.usuario = usuario
@@ -49,5 +49,28 @@ class Pedido(Base):
         self.preco = preco
     
 #Itens Pedido
+class ItensPedido(Base):
+    __tablename__ ="itens_pedido"
+    
+
+    TAMANHO = (
+        ("GRANDE", "GRANDE")
+        ("PEQUENA", "PEQUENA")
+        ("MEDIA", "MEDIA")
+    )
+
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    quantidade = Column("quantidade", Integer)
+    sabor = Column("sabor", String)
+    tamanho = Column("tamanho", String)
+    preco_unitario = Column("preco", Float)
+    pedido = Column("pedido", ForeignKey("pedido.id"))
+
+    def __init__(self, quantidade, sabor, tamanho, preco_unitario, pedido):
+        self.quantidade = quantidade
+        self.tamanho = tamanho
+        self.sabor = sabor
+        self.preco_unitario = preco_unitario
+        self.pedido = pedido
 
 #executa a criação dos metadados (cria efetivamente o banco)
