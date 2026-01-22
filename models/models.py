@@ -1,3 +1,8 @@
+#para criar o banco via alembic
+# alembic revision --autogenerate -m "Initial Migration"
+# e para executar a versao
+# alembic upgrade head
+
 from sqlalchemy import create_engine, Column, String, Integer, Float, Boolean, ForeignKey
 from sqlalchemy.orm import declarative_base
 from sqlalchemy_utils import ChoiceType
@@ -16,7 +21,7 @@ class Usuario(Base):
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     nome =  Column("nome", String, nullable=False) 
     email =  Column("email", String, nullable=False)
-    senha = Column("email", String)
+    senha = Column("senha", String)
     ativo = Column("ativo", Boolean, default=True)
     admin = Column("admin", Boolean, default=False)
 
@@ -31,14 +36,14 @@ class Usuario(Base):
 class Pedido(Base):
     __tablename__ = "pedidos"
 
-    STATUS_PEDIDO = (
-        ("PENDENTE", "PENDENTE"),
-        ("CANCELADO", "CANCELADO"),
-        ("FINALIZADO", "FINALIZADO")
-    )
+    #STATUS_PEDIDO = (
+    #    ("PENDENTE", "PENDENTE"),
+    #    ("CANCELADO", "CANCELADO"),
+    #    ("FINALIZADO", "FINALIZADO")
+    #)
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    status = Column("status", ChoiceType(choices=STATUS_PEDIDO))  #pendente, cancelado e finalizado
+    status = Column("status", String)  #pendente, cancelado e finalizado
     usuario = Column("usuario", ForeignKey("usuarios.id"))
     preco = Column("preco", Float)
     #itens_pedido = Column("itens_pedido", ForeignKey("itens_pedido.id"))
@@ -53,18 +58,18 @@ class ItensPedido(Base):
     __tablename__ ="itens_pedido"
     
 
-    TAMANHO = (
-        ("GRANDE", "GRANDE")
-        ("PEQUENA", "PEQUENA")
-        ("MEDIA", "MEDIA")
-    )
+    #TAMANHO = (
+    #    ("GRANDE", "GRANDE"),
+    #    ("PEQUENA", "PEQUENA"),
+    #    ("MEDIA", "MEDIA")
+    #)
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     quantidade = Column("quantidade", Integer)
     sabor = Column("sabor", String)
     tamanho = Column("tamanho", String)
     preco_unitario = Column("preco", Float)
-    pedido = Column("pedido", ForeignKey("pedido.id"))
+    pedido = Column("pedido", ForeignKey("pedidos.id"))
 
     def __init__(self, quantidade, sabor, tamanho, preco_unitario, pedido):
         self.quantidade = quantidade
